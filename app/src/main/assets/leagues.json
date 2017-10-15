@@ -1,0 +1,65 @@
+[
+  {
+    "id":1,
+    "iconURL":"jackpot_logo",
+    "name":"JACKPOT",
+    "nameShort":"JKPT",
+    "country":"All Clubs"
+  },
+  {
+    "id":2,
+    "iconURL":"europa_logo",
+    "name":"EUROPA LEAGUE",
+    "nameShort":"EUROPA LEAGUE",
+    "country":"European Clubs"
+  },
+  {
+    "id":3,
+    "iconURL":"champions_league_logo",
+    "name":"UEFA CHAMPIONS LEAGUE",
+    "nameShort":"UEFA",
+    "country":"European Clubs"
+  },
+  {
+    "id":4,
+    "iconURL":"bundesliga_logo",
+    "name":"BUNDESLIGA",
+    "nameShort":"BUNDESLIGA",
+    "country":"German League"
+  },
+  {
+    "id":5,
+    "iconURL":"epl_logo",
+    "name":"ENGLISH PREMIER LEAGUE",
+    "nameShort":"EPL",
+    "country":"English League"
+  },
+  {
+    "id":6,
+    "iconURL":"la_liga_logo",
+    "name":"LA LIGA",
+    "nameShort":"LA LIGA",
+    "country":"Spanish League"
+  },
+  {
+    "id":7,
+    "iconURL":"ligue_one_logo",
+    "name":"LIGUE 1",
+    "nameShort":"LIGUE 1",
+    "country":"French League"
+  },
+  {
+    "id":8,
+    "iconURL":"scott_logo",
+    "name":"SCOTTISH PREMIERSHIP",
+    "nameShort":"SCOTTISH PREMIERSHIPS",
+    "country":"Scottish League"
+  },
+  {
+    "id":9,
+    "iconURL":"sirie_a_logo",
+    "name":"SIRIE A",
+    "nameShort":"SIRIE A",
+    "country":"Italian League"
+  }
+]

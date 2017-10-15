@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.apptuned.fantacybetting.JackpotBettingActivity"
+    tools:showIn="@layout/activity_jackpot_betting">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="15dp">
+
+
+        <TextView
+            android:id="@+id/tv_homeText"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/home"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_oneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/one"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toRightOf="@+id/tv_homeText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_xText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/x"
+            android:textColor="@android:color/white"
+            app:layout_constraintHorizontal_bias="0.44"
+            app:layout_constraintLeft_toRightOf="@+id/tv_oneText"
+            app:layout_constraintRight_toLeftOf="@+id/tx_twoText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tx_twoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="72dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/two"
+            android:textColor="@android:color/white"
+            app:layout_constraintRight_toLeftOf="@+id/tv_awayText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_awayText"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/away"
+            android:textColor="@android:color/white"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_jackpot"
+        android:layout_width="match_parent"
+        android:layout_height="433dp"
+        android:background="@color/black"></android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/btn_placeJackpotBet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:text="@string/place_bet"
+        android:textColor="@android:color/white" />
+</LinearLayout>

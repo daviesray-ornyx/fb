@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/davies/dev/projects/FantacyBetting/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="277cbb254b75aa1b6a5f1c17d9407ae0e022f25a">
+        <dex dex="/home/davies/dev/projects/FantacyBetting/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_f1876c41ea3d8a56d59bbcadfe0ade7622c4827e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/davies/dev/projects/FantacyBetting/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/davies/dev/projects/FantacyBetting/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_2402aae1d31b49dbe0920e4846950051eedfa7b4/classes.dex" />
+    </item>
+
+</items>

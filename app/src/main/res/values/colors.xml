@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#31384B</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="black">#000000</color>
+    <color name="fonrPrimary">#DDDDDD</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="sports_blue">#2943A6</color>
+    <color name="sports_red">#D73628</color>
+    <color name="sports_grey">#1E273D</color>
+    <color name="sports_greyLight">#31384B</color>
+    <color name="sports_white">#F3F3F3</color>
+    <color name="sports_black">#0D0D0D</color>
+
+</resources>

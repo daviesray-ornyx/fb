@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">FantacyBetting</string>
+    <string name="app_name_logo">Fantacy Betting</string>
+    <string name="motto">Pure betting fun!!!</string>
+    <string name="how_to_play">New to the game? Click for instructions. </string>
+    <string name="select_country">Select your Country</string>
+    <string name="get_started">Get Started</string>
+    <string name="skip_to_game">Skip to Game</string>
+    <string name="copyright">Copyright@2017</string>
+    <string name="title_activity_account">My Account</string>
+    <string name="account_balance">Account balance</string>
+    <string name="bank_loan">Bank loan</string>
+    <string name="get_bank_loan">Get a bank loan</string>
+    <string name="total_bets">Bets placed</string>
+    <string name="bets_won">Bets won</string>
+    <string name="bets_lost">Bets lost</string>
+    <string name="win_rate">Win rate</string>
+    <string name="place_bet">Place bet</string>
+
+    <string name="title_activity_league_selection">League Selection</string>
+    <string name="title_activity_jackpot_betting">JACKPOT</string>
+    <string name="title_activity_normal_betting">Should be name of league selected</string>
+
+    <string name="home">Home</string>
+    <string name="one">1</string>
+    <string name="x">X</string>
+    <string name="two">2</string>
+    <string name="away">Away</string>
+
+    <string name="vs">VS</string>
+
+    <string name="bet_result">Bet Result</string>
+
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
