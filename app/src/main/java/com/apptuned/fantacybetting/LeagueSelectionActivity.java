@@ -1,7 +1,10 @@
 package com.apptuned.fantacybetting;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +32,8 @@ public class LeagueSelectionActivity extends AppCompatActivity {
     private static final String ACCOUNT_BALANCE = "Account Balance";
     private static final String SINGLE_BET_COST = "Single bet cost";
     private static final String JACKPOT_BET_COST = "Jackpot cost";
+
+    private MenuItem miAccountBalance, miGetUnits, miShare;
 
     private SharedPreferences spConfig;
 
@@ -94,9 +99,13 @@ public class LeagueSelectionActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_account, menu);
-        MenuItem miAccountBalance = menu.findItem(R.id.miAccountBalance);
+        this.miAccountBalance = menu.findItem(R.id.miAccountBalance);
         int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
-        miAccountBalance.setTitle("Balance: " + accountBalance + " Units");
+        this.miAccountBalance.setTitle("Balance: " + accountBalance + " Units");
+
+        this.miGetUnits = menu.findItem(R.id.miShare);
+        this.miShare = menu.findItem(R.id.miShare);
+
         return true;
     }
 
@@ -123,7 +132,6 @@ public class LeagueSelectionActivity extends AppCompatActivity {
                     mInterstitialAd.show();
                 }else {
                     // Just go ahead and get units
-                    Toast.makeText(getApplicationContext(), "Interstitial isn't loaded yet. Just get units", Toast.LENGTH_SHORT).show();
                     getUnits();
                 }
                 return true;
@@ -133,16 +141,23 @@ public class LeagueSelectionActivity extends AppCompatActivity {
     }
 
     private void getUnits(){
-        int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
-        int singleBetCost = spConfig.getInt(SINGLE_BET_COST, 0);
-        int jackpotBetCost = spConfig.getInt(JACKPOT_BET_COST, 0);
+        final int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
+        final int singleBetCost = spConfig.getInt(SINGLE_BET_COST, 0);
+        final int jackpotBetCost = spConfig.getInt(JACKPOT_BET_COST, 0);
 
         if(accountBalance < singleBetCost || accountBalance < jackpotBetCost){
             // Not enough units. Tailor message for success and credit account
-            Toast.makeText(this, "Your account has been credited with 50 Fantasy Betting Units. Enjoy the game!!", Toast.LENGTH_SHORT).show();
+            int newBalance = accountBalance + 100;
+            spConfig.edit().putInt(ACCOUNT_BALANCE, newBalance).commit();
+            // Update new balance in menu item
+            this.miAccountBalance.setTitle("Balance: " + newBalance + " Units");
+
+            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request",
+                    "Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....", 1);
+           messageDialogActivity.show();
         }else {
-            // Betting units suffice. Show message that user can still place both Single and Jackpot bets
-            Toast.makeText(this, "Your account has sufficient Fantasy Betting Units. Deplete these to get more!!", Toast.LENGTH_SHORT).show();
+            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request", "Your account has sufficient Fantasy Betting Units", 0);
+            messageDialogActivity.show();
         }
     }
 
