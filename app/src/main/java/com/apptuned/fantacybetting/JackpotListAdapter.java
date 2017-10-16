@@ -52,7 +52,7 @@ public class JackpotListAdapter extends RecyclerView.Adapter<JackpotListAdapter.
         final Club awayTeam = currentBetPair.getAwayClub();
         holder.homeTeamName.setText(homeTeam.getName());
         holder.awayTeamName.setText(awayTeam.getName());
-        holder.gameDate.setText("Today's date");
+        //holder.gameDate.setText("Today's date");
         holder.stadium.setText(homeTeam.getStadium());
 
         holder.rgBetChoice.setSelected(false); // So that none is pre selected
@@ -111,7 +111,6 @@ public class JackpotListAdapter extends RecyclerView.Adapter<JackpotListAdapter.
 
             homeTeamName = (TextView) itemView.findViewById(R.id.tv_homeTeamName);
             awayTeamName = (TextView) itemView.findViewById(R.id.tv_awayTeamName);
-            gameDate = (TextView) itemView.findViewById(R.id.tv_gameDate);
             stadium = (TextView) itemView.findViewById(R.id.tv_stadium);
             homeTeamLogo = (CircularImageView) itemView.findViewById(R.id.img_homeTeamLogo);
             awayTeamLogo = (CircularImageView) itemView.findViewById(R.id.img_awayTeamLogo);

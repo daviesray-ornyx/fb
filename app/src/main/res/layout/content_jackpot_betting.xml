@@ -4,16 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
+    android:background="@color/sports_grey"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.apptuned.fantacybetting.JackpotBettingActivity"
     tools:showIn="@layout/activity_jackpot_betting">
 
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">  <!-- ca-app-pub-3940256099942544/6300978111 Test -->
+    </com.google.android.gms.ads.AdView>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:background="@color/sports_grey">
 
 
         <TextView
@@ -25,6 +36,7 @@
             android:text="@string/home"
             android:textColor="@android:color/white"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +48,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/one"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/tv_homeText"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,6 +61,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/x"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintHorizontal_bias="0.44"
             app:layout_constraintLeft_toRightOf="@+id/tv_oneText"
             app:layout_constraintRight_toLeftOf="@+id/tx_twoText"
@@ -61,6 +75,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/two"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintRight_toLeftOf="@+id/tv_awayText"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,8 +87,10 @@
             android:layout_marginTop="8dp"
             android:text="@string/away"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
 
@@ -81,13 +98,29 @@
         android:id="@+id/rv_jackpot"
         android:layout_width="match_parent"
         android:layout_height="433dp"
-        android:background="@color/black"></android.support.v7.widget.RecyclerView>
+        android:background="@color/colorPrimaryDark"></android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cost: 20 Units"
+        android:textAlignment="center"
+        android:textColor="@color/sports_white"
+        android:background="@color/sports_greyLight"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jackpot: 5,000 Units"
+        android:textAlignment="center"
+        android:textColor="@color/sports_white"
+        android:background="@color/sports_greyLight"/>
 
     <Button
         android:id="@+id/btn_placeJackpotBet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:background="@color/colorPrimaryDark"
         android:text="@string/place_bet"
         android:textColor="@android:color/white" />
 </LinearLayout>

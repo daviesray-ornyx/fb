@@ -1,10 +1,13 @@
 package com.apptuned.fantacybetting;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,12 +25,25 @@ import java.util.ArrayList;
 
 public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettingtListAdapter.NormalBettingListViewHolder> {
 
+    private static final String ACCOUNT_BALANCE = "Account Balance";
+    private static final String SINGLE_BET_COST = "Single bet cost";
+    private static final String JACKPOT_BET_COST = "Jackpot cost";
+
+    private SharedPreferences spConfig;
+
+    private MenuItem miAccountBalance;
+
     private Context context;
     private ArrayList<BetPair> betPairArrayList;
 
     public NormalBettingtListAdapter(Context context, ArrayList<BetPair> betPairArrayList){
         this.context = context;
         this.betPairArrayList = betPairArrayList;
+        this.miAccountBalance = miAccountBalance;
+    }
+
+    public void setMiAccountBalance(MenuItem miAccountBalance){
+        this.miAccountBalance = miAccountBalance;
     }
 
     @Override
@@ -47,7 +63,6 @@ public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettin
         final Club awayTeam = currentBetPair.getAwayClub();
         holder.homeTeamName.setText(homeTeam.getName());
         holder.awayTeamName.setText(awayTeam.getName());
-        holder.gameDate.setText("Today's date");
         holder.stadium.setText(homeTeam.getStadium());
 
         holder.rgBetChoice.setSelected(false); // So that none is selected by default
@@ -91,26 +106,45 @@ public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettin
         holder.btnPlaceNormalBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Activity hostActivity = (Activity) view.getContext();
+                spConfig = view.getContext().getSharedPreferences("com.apptuned.fantacybetting.Config", hostActivity.MODE_PRIVATE);
+                MessageDialogActivity messageDialogActivity = new MessageDialogActivity(hostActivity);
+                int netEffect = -10;
+
+
                 if(currentBetPair.getUserSelectedClub() == null){
-                    Toast.makeText(view.getContext(), "Select your prediction.", Toast.LENGTH_SHORT).show();
+                    messageDialogActivity.setTitle("Single Bet");
+                    messageDialogActivity.setMessage("No prediction selected");
+                    messageDialogActivity.setStatus(-1);
                 }
                 else {
                     if(currentBetPair.getUserSelectedClub() == currentBetPair.getCorrectResultClub()){
-                        Toast.makeText(view.getContext(), "Congratulations!! You have won $x", Toast.LENGTH_SHORT).show();
+                        netEffect += 100; // You win 100 Units
+                        messageDialogActivity.setTitle("Congratulations!!!");
+                        messageDialogActivity.setMessage("Correct prediction. You have won 100 Fantasy Betting Units.. ");
+                        messageDialogActivity.setStatus(-1);
                     }
                     else {
-                        Toast.makeText(view.getContext(), "Incorrect prediction. Try another game.", Toast.LENGTH_SHORT).show();
+                        messageDialogActivity.setTitle("Incorrect Prediction");
+                        messageDialogActivity.setMessage("Your prediction was incorrect. Try again to win.");
+                        messageDialogActivity.setStatus(-1);
                     }
 
-                    // TODO Remove this entry from the recyvler view
+                    int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
+                    spConfig.edit().putInt(ACCOUNT_BALANCE, accountBalance + netEffect).commit();
+
+                    // Update menu item
+                    if(miAccountBalance != null){
+                        miAccountBalance.setTitle("Balance: " + accountBalance + netEffect + " Units");
+                    }
+
                     betPairArrayList.remove(holderPosition);
                     notifyItemRemoved(holderPosition);
                     notifyItemRangeChanged(holderPosition, betPairArrayList.size());
 
-                    Toast.makeText(view.getContext(), "Bet Item removed from list", Toast.LENGTH_SHORT).show();
-
-                    //TODO Check if any more items exist in list and add items to list accordingly
+                    // TODO Check if any more bets exist in the list and say no more bets accordingly
                 }
+                messageDialogActivity.show();
             }
         });
     }
@@ -134,7 +168,6 @@ public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettin
 
             homeTeamName = (TextView) itemView.findViewById(R.id.tv_homeTeamName);
             awayTeamName = (TextView) itemView.findViewById(R.id.tv_awayTeamName);
-            gameDate = (TextView) itemView.findViewById(R.id.tv_gameDate);
             stadium = (TextView) itemView.findViewById(R.id.tv_stadium);
             homeTeamLogo = (CircularImageView) itemView.findViewById(R.id.img_homeTeamLogo);
             awayTeamLogo = (CircularImageView) itemView.findViewById(R.id.img_awayTeamLogo);

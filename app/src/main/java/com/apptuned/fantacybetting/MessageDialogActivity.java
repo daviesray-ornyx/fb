@@ -43,6 +43,30 @@ public class MessageDialogActivity extends Dialog implements android.view.View.O
         this.status = status;
     }
 
+    public String getTitle(){
+        return this.title;
+    }
+
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public String getMessage(){
+        return this.message;
+    }
+
+    public void setMessage(String message){
+        this.message = message;
+    }
+
+    public int getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(int status){
+        this.status = status;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,5 +110,6 @@ public class MessageDialogActivity extends Dialog implements android.view.View.O
     public void onClick(View view) {
         dismiss();
     }
+
 
 }

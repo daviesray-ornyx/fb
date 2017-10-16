@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.apptuned.fantacybetting.NormalBettingActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -20,7 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/content_normal_betting" />
+    <include layout="@layout/content_normal_betting" />
 
 </android.support.design.widget.CoordinatorLayout>
