@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -37,6 +39,7 @@ public class NormalBettingActivity extends AppCompatActivity {
     private League selectedLeague;
     private BetPairGroup betPairGroup;
     private RecyclerView rvNormalBetting;
+    private NormalBettingtListAdapter normalBettingtListAdapter;
 
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
@@ -85,7 +88,13 @@ public class NormalBettingActivity extends AppCompatActivity {
         betPairGroup = new BetPairGroup();
         betPairGroup.generate(this, false, 10, selectedLeague.getId());
 
-        NormalBettingtListAdapter normalBettingtListAdapter = new NormalBettingtListAdapter(NormalBettingActivity.this, betPairGroup.getBetPairs());
+        normalBettingtListAdapter = new NormalBettingtListAdapter(NormalBettingActivity.this, betPairGroup.getBetPairs());
+        normalBettingtListAdapter.setOnAccountBalanceChangeListener(new OnAccountBalanceChangeListener() {
+            @Override
+            public void onAccountBalanceChanged(int newAccountBalance) {
+                miAccountBalance.setTitle("Balance: " + newAccountBalance + " Units");
+            }
+        });
         rvNormalBetting.setAdapter(normalBettingtListAdapter);
     }
 
@@ -136,20 +145,29 @@ public class NormalBettingActivity extends AppCompatActivity {
         final int singleBetCost = spConfig.getInt(SINGLE_BET_COST, 0);
         final int jackpotBetCost = spConfig.getInt(JACKPOT_BET_COST, 0);
 
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Betting Units Request");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
         if(accountBalance < singleBetCost || accountBalance < jackpotBetCost){
             // Not enough units. Tailor message for success and credit account
             int newBalance = accountBalance + 100;
             spConfig.edit().putInt(ACCOUNT_BALANCE, newBalance).commit();
             // Update new balance in menu item
             this.miAccountBalance.setTitle("Balance: " + newBalance + " Units");
-
-            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request",
-                    "Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....", 1);
-            messageDialogActivity.show();
-        }else {
-            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request", "Your account has sufficient Fantasy Betting Units", 0);
-            messageDialogActivity.show();
+            alertDialog.setMessage("Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....");
+            alertDialog.setIcon(R.drawable.core_success_dark);
+        }else{
+            alertDialog.setMessage("Your account has sufficient Fantasy Betting Units.");
+            alertDialog.setIcon(R.drawable.core_warning_dark);
         }
+
+        alertDialog.show();
     }
 
     public MenuItem getMiAccountBalance(){

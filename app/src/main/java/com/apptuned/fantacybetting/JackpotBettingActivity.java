@@ -8,11 +8,13 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +46,8 @@ public class JackpotBettingActivity extends AppCompatActivity {
 
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
+
+    private boolean backToLeagues = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,18 @@ public class JackpotBettingActivity extends AppCompatActivity {
                 Activity hostActivity = (Activity) view.getContext();
                 boolean completeSelection = true;
 
-                MessageDialogActivity messageDialogActivity = new MessageDialogActivity(hostActivity);
+                AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(hostActivity, R.style.DialogTheme)).create();
+                alertDialog.setTitle("Jackpot Bet");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(!backToLeagues)
+                                    return;
+                                Intent intent = new Intent(getApplicationContext(), LeagueSelectionActivity.class);
+                                startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        });
 
                 ArrayList<BetPair> betPairArrayList =  betPairGroup.getBetPairs();
                 for(int i = 0; i < betPairArrayList.size(); i++){
@@ -120,38 +135,26 @@ public class JackpotBettingActivity extends AppCompatActivity {
                     // Check if win and give message
                     if(win){
                         netEffect += 5000;
-                        messageDialogActivity.setTitle("Congratulations!!!");
-                        messageDialogActivity.setMessage("You have won the jackpot. Your account has been credited with 5,000!");
-                        messageDialogActivity.setStatus(1);
+                        alertDialog.setMessage("You have won the jackpot. Your account has been credited with 5,000!");
+                        alertDialog.setIcon(R.drawable.core_success_dark);
                     }
                     else {
-                        messageDialogActivity.setTitle("Jackpot Bet Results");
-                        messageDialogActivity.setMessage("You had some wrong predictions. Play again to win!!");
-                        messageDialogActivity.setStatus(0);
+                        alertDialog.setMessage("You had some wrong predictions. Play again to win!!");
+                        alertDialog.setIcon(R.drawable.core_error_dark);
                     }
-                    //TODO Update account values
+
                     int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
                     spConfig.edit().putInt(ACCOUNT_BALANCE, accountBalance + netEffect).commit();
-                    //TODO Update menuItem on accounts
                     miAccountBalance.setTitle("Balance: " + accountBalance + netEffect + " Units");
 
-                    // Add Handler and show
-                    messageDialogActivity.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            Intent intent = new Intent(getApplicationContext(), LeagueSelectionActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    messageDialogActivity.show();
+                    backToLeagues = true;
                 }
                 else {
-                    // // TODO: Create custom alert
-                    messageDialogActivity.setTitle("Incomplete Bet");
-                    messageDialogActivity.setMessage("Please select options for all games in the list!!");
-                    messageDialogActivity.setStatus(-1);
-                    messageDialogActivity.show();
+                    alertDialog.setMessage("Please select options for all games in the list!!");
+                    alertDialog.setIcon(R.drawable.core_error_dark);
+                    backToLeagues = false;
                 }
+                alertDialog.show();
             }
         });
 
@@ -204,20 +207,29 @@ public class JackpotBettingActivity extends AppCompatActivity {
         final int singleBetCost = spConfig.getInt(SINGLE_BET_COST, 0);
         final int jackpotBetCost = spConfig.getInt(JACKPOT_BET_COST, 0);
 
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Betting Units Request");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
         if(accountBalance < singleBetCost || accountBalance < jackpotBetCost){
             // Not enough units. Tailor message for success and credit account
             int newBalance = accountBalance + 100;
             spConfig.edit().putInt(ACCOUNT_BALANCE, newBalance).commit();
             // Update new balance in menu item
             this.miAccountBalance.setTitle("Balance: " + newBalance + " Units");
-
-            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request",
-                    "Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....", 1);
-            messageDialogActivity.show();
-        }else {
-            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request", "Your account has sufficient Fantasy Betting Units", 0);
-            messageDialogActivity.show();
+            alertDialog.setMessage("Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....");
+            alertDialog.setIcon(R.drawable.core_success_dark);
+        }else{
+            alertDialog.setMessage("Your account has sufficient Fantasy Betting Units.");
+            alertDialog.setIcon(R.drawable.core_warning_dark);
         }
+
+        alertDialog.show();
     }
 
 }

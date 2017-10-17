@@ -76,14 +76,18 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        // TODO Check sharedPreferences storage for previous usage
-
-
         if(spConfig.getBoolean(APP_INITIALIZED, false)){
             // App is initializad, Move to accounts page
-            Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LeagueSelectionActivity.class);
             startActivity(intent);
         }
-        // App not initialized, remain in page
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
+    }
+
 }

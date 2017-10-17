@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -141,10 +143,51 @@ public class LeagueSelectionActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
+    }
+
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        //Refresh your stuff here
+        final Handler handler = new Handler();
+        final int delay = 1000;
+
+        handler.postDelayed(new Runnable(){
+            int trials = 0;
+            public void run(){
+                //do something
+                if(miAccountBalance == null){
+                    if(trials < 20)
+                        handler.postDelayed(this, delay);
+                }
+                else {
+                    int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
+                    miAccountBalance.setTitle("Balance: " + accountBalance + " Units");
+                }
+                trials++;
+            }
+        }, delay);
+    }
+
     private void getUnits(){
         final int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
         final int singleBetCost = spConfig.getInt(SINGLE_BET_COST, 0);
         final int jackpotBetCost = spConfig.getInt(JACKPOT_BET_COST, 0);
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Betting Units Request");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
         if(accountBalance < singleBetCost || accountBalance < jackpotBetCost){
             // Not enough units. Tailor message for success and credit account
@@ -152,14 +195,14 @@ public class LeagueSelectionActivity extends AppCompatActivity {
             spConfig.edit().putInt(ACCOUNT_BALANCE, newBalance).commit();
             // Update new balance in menu item
             this.miAccountBalance.setTitle("Balance: " + newBalance + " Units");
-
-            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request",
-                    "Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....", 1);
-           messageDialogActivity.show();
-        }else {
-            MessageDialogActivity messageDialogActivity = new MessageDialogActivity(this, "Fantasy Betting Units Request", "Your account has sufficient Fantasy Betting Units", 0);
-            messageDialogActivity.show();
+            alertDialog.setMessage("Congratulations!!! Your account has been credited with " + 100 + " Fantasy Betting Units....");
+            alertDialog.setIcon(R.drawable.core_success_dark);
+        }else{
+            alertDialog.setMessage("Your account has sufficient Fantasy Betting Units.");
+            alertDialog.setIcon(R.drawable.core_warning_dark);
         }
+
+        alertDialog.show();
     }
 
 

@@ -2,10 +2,14 @@ package com.apptuned.fantacybetting;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.annotation.IdRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -40,6 +43,12 @@ public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettin
         this.context = context;
         this.betPairArrayList = betPairArrayList;
         this.miAccountBalance = miAccountBalance;
+    }
+
+    public OnAccountBalanceChangeListener onAccountBalanceChangeListener;
+
+    public void setOnAccountBalanceChangeListener(OnAccountBalanceChangeListener onAccountBalanceChangeListener){
+        this.onAccountBalanceChangeListener = onAccountBalanceChangeListener;
     }
 
     public void setMiAccountBalance(MenuItem miAccountBalance){
@@ -106,37 +115,41 @@ public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettin
         holder.btnPlaceNormalBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Activity hostActivity = (Activity) view.getContext();
+                final Activity hostActivity = (Activity) view.getContext();
                 spConfig = view.getContext().getSharedPreferences("com.apptuned.fantacybetting.Config", hostActivity.MODE_PRIVATE);
-                MessageDialogActivity messageDialogActivity = new MessageDialogActivity(hostActivity);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(hostActivity, R.style.DialogTheme)).create();
+                alertDialog.setTitle("Single Bet Result");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
                 int netEffect = -10;
 
 
                 if(currentBetPair.getUserSelectedClub() == null){
-                    messageDialogActivity.setTitle("Single Bet");
-                    messageDialogActivity.setMessage("No prediction selected");
-                    messageDialogActivity.setStatus(-1);
+                    alertDialog.setMessage("No prediction selected");
+                    alertDialog.setIcon(R.drawable.core_warning_dark);
                 }
                 else {
                     if(currentBetPair.getUserSelectedClub() == currentBetPair.getCorrectResultClub()){
                         netEffect += 100; // You win 100 Units
-                        messageDialogActivity.setTitle("Congratulations!!!");
-                        messageDialogActivity.setMessage("Correct prediction. You have won 100 Fantasy Betting Units.. ");
-                        messageDialogActivity.setStatus(-1);
+                        alertDialog.setMessage("Congratulations!!! Correct prediction. You have won 100 Fantasy Betting Units.");
+                        alertDialog.setIcon(R.drawable.core_success_dark);
                     }
                     else {
-                        messageDialogActivity.setTitle("Incorrect Prediction");
-                        messageDialogActivity.setMessage("Your prediction was incorrect. Try again to win.");
-                        messageDialogActivity.setStatus(-1);
+                        alertDialog.setMessage("Your prediction was incorrect. Try again to win.");
+                        alertDialog.setIcon(R.drawable.core_success_dark);
                     }
 
                     int accountBalance = spConfig.getInt(ACCOUNT_BALANCE, 0);
                     spConfig.edit().putInt(ACCOUNT_BALANCE, accountBalance + netEffect).commit();
 
                     // Update menu item
-                    if(miAccountBalance != null){
-                        miAccountBalance.setTitle("Balance: " + accountBalance + netEffect + " Units");
-                    }
+                    onAccountBalanceChangeListener.onAccountBalanceChanged(accountBalance + netEffect);
 
                     betPairArrayList.remove(holderPosition);
                     notifyItemRemoved(holderPosition);
@@ -144,7 +157,7 @@ public class NormalBettingtListAdapter extends RecyclerView.Adapter<NormalBettin
 
                     // TODO Check if any more bets exist in the list and say no more bets accordingly
                 }
-                messageDialogActivity.show();
+                alertDialog.show();
             }
         });
     }
